@@ -5,11 +5,9 @@ metadata:
   labels:
     app: grafana
 spec:
-  type: NodePort
   ports:
-  - port: 3038
+  - port: 3000
     protocol: TCP
     targetPort: web
-    name: http
   selector:
     app: grafana
