@@ -38,15 +38,15 @@ if [[ $deploy_nginx_ingress =~ ^([yY][eE][sS]|[yY])$ ]]; then
   sed -i -e 's/domain_name/'"$domain_name"'/g' ./ingress.yaml
 
   #Set username and password for basic-auth
-  echo
-  echo -e "${BLUE}Please set the username and password for basic-auth to prometheus and alertmanager:"
-  tput sgr0
-  read -p "Set username [monitor]: " username
-  htpasswd -c auth ${username:-'monitor'}
+  #echo
+  #echo -e "${BLUE}Please set the username and password for basic-auth to prometheus and alertmanager:"
+  #tput sgr0
+  #read -p "Set username [monitor]: " username
+  #htpasswd -c auth ${username:-'monitor'}
 
   #base64 encode the basic-auth and set the secret
-  BASIC_AUTH=$(cat ./auth | base64)
-  sed -i -e 's/htpasswd/'"$BASIC_AUTH"'/g' ./basic-auth.secret.yaml
+  #BASIC_AUTH=$(cat ./auth | base64)
+  #sed -i -e 's/htpasswd/'"$BASIC_AUTH"'/g' ./basic-auth.secret.yaml
 
   #deploy ingress controller
   echo
@@ -58,7 +58,7 @@ if [[ $deploy_nginx_ingress =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo
   echo -e "${BLUE}Deploying  K8S Ingress Controller"
   tput sgr0
-  kubectl apply -f ./basic-auth.secret.yaml
+  #kubectl apply -f ./basic-auth.secret.yaml
   kubectl apply -f ./ingress.yaml
 
   #wait for the ingress to become available.
