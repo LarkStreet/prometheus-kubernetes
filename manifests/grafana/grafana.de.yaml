@@ -1,3 +1,4 @@
+
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -37,6 +38,11 @@ spec:
             secretKeyRef:
               name: github-credentials
               key: secret
+        - name: GF_SECURITY_ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: grafana-credentials
+              key: user
         - name: GF_AUTH_GITHUB_SCOPES
           value: "user:email,read:org"
         - name: GF_AUTH_GITHUB_AUTH_URL
@@ -47,34 +53,29 @@ spec:
           value: "https://github.com/login/oauth/"
         - name: GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS
           value: "LarkStreet"
-        - name: GF_SECURITY_ADMIN_USER
-          valueFrom:
-            secretKeyRef:
-              name: grafana-credentials
-              key: user
         - name: GF_SECURITY_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
               name: grafana-credentials
               key: password
-        - name: GF_SMTP_ENABLED:
+        - name: GF_SMTP_ENABLED
           value: "true"
-        - name: GF_SMTP_HOST:
-          value: email-smtp.us-west-2.amazonaws.com:587
-        - name: GF_SMTP_USER:
+        - name: GF_SMTP_HOST
+          value: "email-smtp.us-west-2.amazonaws.com:587"
+        - name: GF_SMTP_USER
           valueFrom:
             secretKeyRef:
               name: smtp-credentials
               key: user
-        - name: GF_SMTP_PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: smtp-credentials
-            key: password
-        - name: GF_SMTP_FROM_ADDRESS:
-          value: internal@rila.io
-        - name: GF_SMTP_FROM_NAME:
-          value: 
+        - name: GF_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smtp-credentials
+              key: password
+        - name: GF_SMTP_FROM_ADDRESS
+          value: "internal@rila.io"
+        - name: GF_SMTP_FROM_NAME
+          value: "RILA Internal"
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/grafana-storage
