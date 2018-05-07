@@ -63,16 +63,16 @@ spec:
           value: "true"
         - name: GF_SMTP_HOST
           value: "email-smtp.us-west-2.amazonaws.com:587"
-        #- name: GF_SMTP_USER
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: smtp-credentials
-        #      key: username
-        #- name: GF_SMTP_PASSWORD
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: smtp-credentials
-        #      key: password
+        - name: GF_SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: smtp-credentials
+              key: username
+        - name: GF_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smtp-credentials
+              key: password
         - name: GF_SMTP_FROM_ADDRESS
           value: "internal@rila.io"
         - name: GF_SMTP_FROM_NAME
