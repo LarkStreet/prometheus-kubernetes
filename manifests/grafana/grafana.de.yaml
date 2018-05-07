@@ -73,10 +73,10 @@ spec:
         #    secretKeyRef:
         #      name: smtp-credentials
         #      key: password
-        #- name: GF_SMTP_FROM_ADDRESS
-        #  value: "internal@rila.io"
-        #- name: GF_SMTP_FROM_NAME
-        #  value: "RILA Internal"
+        - name: GF_SMTP_FROM_ADDRESS
+          value: "internal@rila.io"
+        - name: GF_SMTP_FROM_NAME
+          value: "RILA Internal"
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/grafana-storage
