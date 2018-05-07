@@ -59,10 +59,10 @@ spec:
             secretKeyRef:
               name: grafana-credentials
               key: password
-        #- name: GF_SMTP_ENABLED
-        #  value: "true"
-        #- name: GF_SMTP_HOST
-        #  value: "email-smtp.us-west-2.amazonaws.com:587"
+        - name: GF_SMTP_ENABLED
+          value: "true"
+        - name: GF_SMTP_HOST
+          value: "email-smtp.us-west-2.amazonaws.com:587"
         #- name: GF_SMTP_USER
         #  valueFrom:
         #    secretKeyRef:
