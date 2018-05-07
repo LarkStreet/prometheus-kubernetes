@@ -44,15 +44,15 @@ spec:
               name: grafana-credentials
               key: user
         - name: GF_AUTH_GITHUB_SCOPES
-          value: "user:email,read:org"
+          value: user:email,read:org
         - name: GF_AUTH_GITHUB_AUTH_URL
-          value: "https://github.com/login/oauth/authorize"
+          value: https://github.com/login/oauth/authorize
         - name: GF_AUTH_GITHUB_TOKEN_URL
-          value: "https://github.com/login/oauth/access_token"
+          value: https://github.com/login/oauth/access_token
         - name: GF_AUTH_GITHUB_API_URL
-          value: "https://github.com/login/oauth/"
+          value: https://github.com/login/oauth/
         - name: GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS
-          value: "LarkStreet"
+          value: LarkStreet
         - name: GF_SECURITY_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -61,7 +61,7 @@ spec:
         - name: GF_SMTP_ENABLED
           value: "true"
         - name: GF_SMTP_HOST
-          value: "email-smtp.us-west-2.amazonaws.com:587"
+          value: email-smtp.us-west-2.amazonaws.com:587
         - name: GF_SMTP_USER
           valueFrom:
             secretKeyRef:
@@ -73,9 +73,9 @@ spec:
               name: smtp-credentials
               key: password
         - name: GF_SMTP_FROM_ADDRESS
-          value: "internal@rila.io"
+          value: internal@rila.io
         - name: GF_SMTP_FROM_NAME
-          value: "RILA Internal"
+          value: RILA Internal
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/grafana-storage
