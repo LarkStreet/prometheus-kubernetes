@@ -27,6 +27,8 @@ spec:
       - name: grafana
         image: grafana/grafana:GRAFANA_VERSION
         env:
+        - name: GF_SERVER_ROOT_URL
+          value: "https://dev-grafana.rila.io"
         - name: GF_AUTH_GITHUB_ENABLED
           value: "true"
         - name: GF_AUTH_GITHUB_CLIENT_ID
