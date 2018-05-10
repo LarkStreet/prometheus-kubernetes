@@ -31,35 +31,27 @@ spec:
         env:
         - name: GF_SERVER_ROOT_URL
           value: "https://dev-grafana.rila.io"
-        - name: GF_LOG_MODE
-          value: "console file syslog"
-        - name: GF_LOG_LEVEL
-          value: "debug"
-        - name: GF_AUTH_GITHUB_ENABLED
+        - name: GF_AUTH_GOOGLE_ENABLED
           value: "true"
-        - name: GF_AUTH_GITHUB_CLIENT_ID
+        - name: GF_AUTH_GOOGLE_CLIENT_ID
           valueFrom:
             secretKeyRef:
-              name: github-credentials
+              name: google-oauth-credentials
               key: id
-        - name: GF_AUTH_GITHUB_CLIENT_SECRET
+        - name: GF_AUTH_GOOGLE_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
-              name: github-credentials
+              name: google-oauth-credentials
               key: secret
-        - name: GF_AUTH_GITHUB_ALLOW_SIGN_UP
-          value: "true"
-        - name: GF_AUTH_GITHUB_SCOPES
-          value: "user:email,read:org"
-        - name: GF_AUTH_GITHUB_AUTH_URL
-          value: "https://github.com/login/oauth/authorize"
-        - name: GF_AUTH_GITHUB_TOKEN_URL
-          value: "https://github.com/login/oauth/access_token"
-        - name: GF_AUTH_GITHUB_API_URL
-          value: "https://api.github.com/user"
-        - name: GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS
-          value: "LarkStreet"
-        - name: GF_AUTH_GITHUB_TLS_SKIP_VERIFY_INSECURE
+        - name: GF_AUTH_GOOGLE_SCOPES
+          value: "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
+        - name: GF_AUTH_GOOGLE_AUTH_URL
+          value: "https://accounts.google.com/o/oauth2/auth"
+        - name: GF_AUTH_GOOGLE_TOKEN_URL
+          value: "https://accounts.google.com/o/oauth2/token"
+        - name: GF_AUTH_GITHUB_ALLOWED_DOMAINS
+          value: "larkst.io"
+        - name: GF_AUTH_GOOGLE_ALLOW_SIGN_UP
           value: "true"
         - name: GF_SECURITY_ADMIN_USER
           valueFrom:
