@@ -49,10 +49,10 @@ spec:
           value: "https://accounts.google.com/o/oauth2/auth"
         - name: GF_AUTH_GOOGLE_TOKEN_URL
           value: "https://accounts.google.com/o/oauth2/token"
-        - name: GF_AUTH_GITHUB_ALLOWED_DOMAINS
+        - name: GF_AUTH_GOOGLE_ALLOWED_DOMAINS
           value: "larkst.io"
         - name: GF_AUTH_GOOGLE_ALLOW_SIGN_UP
-          value: "true"
+          value: "false"
         - name: GF_SECURITY_ADMIN_USER
           valueFrom:
             secretKeyRef:
