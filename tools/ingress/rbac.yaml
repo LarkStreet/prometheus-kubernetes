@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: nginx-ingress-serviceaccount
+  name: monitoring-nginx-ingress-serviceaccount
   namespace: ingress-nginx
 
 ---
@@ -9,7 +9,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: nginx-ingress-clusterrole
+  name: monitoring-nginx-ingress-clusterrole
 rules:
   - apiGroups:
       - ""
@@ -63,7 +63,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: nginx-ingress-role
+  name: monitoring-nginx-ingress-role
   namespace: ingress-nginx
 rules:
   - apiGroups:
@@ -106,15 +106,15 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: nginx-ingress-role-nisa-binding
+  name: monitoring-nginx-ingress-role-nisa-binding
   namespace: ingress-nginx
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: nginx-ingress-role
+  name: monitoring-nginx-ingress-role
 subjects:
   - kind: ServiceAccount
-    name: nginx-ingress-serviceaccount
+    name: monitoring-nginx-ingress-serviceaccount
     namespace: ingress-nginx
 
 ---
@@ -122,12 +122,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: nginx-ingress-clusterrole-nisa-binding
+  name: monitoring-nginx-ingress-clusterrole-nisa-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: nginx-ingress-clusterrole
+  name: monitoring-nginx-ingress-clusterrole
 subjects:
   - kind: ServiceAccount
-    name: nginx-ingress-serviceaccount
+    name: monitoring-nginx-ingress-serviceaccount
     namespace: ingress-nginx

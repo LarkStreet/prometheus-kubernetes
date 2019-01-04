@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: nginx-default-backend
+  name: monitoring-nginx-default-backend
   namespace: nginx-ingress
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
@@ -10,12 +10,12 @@ spec:
   - port: 80
     targetPort: http
   selector:
-    app: nginx-default-backend
+    app: monitoring-nginx-default-backend
 ---
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: nginx-default-backend
+  name: monitoring-nginx-default-backend
   namespace: nginx-ingress
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
@@ -25,11 +25,11 @@ spec:
     metadata:
       labels:
         k8s-addon: ingress-nginx.addons.k8s.io
-        app: nginx-default-backend
+        app: monitoring-nginx-default-backend
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-      - name: default-http-backend
+      - name: monitoring-nginx-default--backend
         image: gcr.io/google_containers/defaultbackend:1.3
         livenessProbe:
           httpGet:
@@ -53,7 +53,7 @@ spec:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ingress-nginx
+  name: monitoring-ingress-nginx
   namespace: nginx-ingress
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
@@ -63,7 +63,7 @@ data:
 kind: Service
 apiVersion: v1
 metadata:
-  name: ingress-nginx
+  name: monitoring-ingress-nginx
   namespace: nginx-ingress
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
@@ -79,7 +79,7 @@ spec:
   #- 8.8.8.8
   #- 8.8.4.4
   selector:
-    app: ingress-nginx
+    app: monitoring-ingress-nginx
   ports:
   - name: http
     port: 80
@@ -91,7 +91,7 @@ spec:
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: ingress-nginx
+  name: monitoring-ingress-nginx
   namespace: nginx-ingress
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
@@ -103,13 +103,13 @@ spec:
   template:
     metadata:
       labels:
-        app: ingress-nginx
+        app: monitoring-ingress-nginx
         k8s-addon: ingress-nginx.addons.k8s.io
     spec:
       terminationGracePeriodSeconds: 60
       containers:
       - image: gcr.io/google_containers/nginx-ingress-controller:0.9.0-beta.13
-        name: ingress-nginx
+        name: monitoring-ingress-nginx
         imagePullPolicy: Always
         ports:
           - name: http
@@ -135,7 +135,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
         args:
-        - /nginx-ingress-controller
-        - --default-backend-service=$(POD_NAMESPACE)/nginx-default-backend
-        - --configmap=$(POD_NAMESPACE)/ingress-nginx
-        - --publish-service=$(POD_NAMESPACE)/ingress-nginx
+        - /monitoring-nginx-ingress-controller
+        - --default-backend-service=$(POD_NAMESPACE)/monitoring-nginx-default-backend
+        - --configmap=$(POD_NAMESPACE)/monitoring-ingress-nginx
+        - --publish-service=$(POD_NAMESPACE)/monitoring-ingress-nginx
