@@ -2,13 +2,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 rules:
 - apiGroups: [""]
   resources:
@@ -56,7 +56,10 @@ rules:
 - apiGroups: [""]
   resources:
   - nodes/metrics
-  verbs: ["get"]
+  - endpoints
+  - pods
+  - services
+  verbs: ["get", "list", "watch"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
 ---
@@ -64,7 +67,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -72,7 +75,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -86,7 +89,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -100,7 +103,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -113,4 +116,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-k8s
-  namespace: monitoring
+  namespace: CUSTOM_NAMESPACE
