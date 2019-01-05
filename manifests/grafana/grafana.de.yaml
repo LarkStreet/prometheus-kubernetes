@@ -135,6 +135,7 @@ spec:
           name: grafana-datasources
       - configMap:
           name: grafana-dashboards
+        name: grafana-dashboards
       - configMap:
           name: grafana-dashboard-k8s-cluster-rsrc-use
         name: grafana-dashboard-k8s-cluster-rsrc-use
