@@ -2,6 +2,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: STORAGE_CLASS_TYPE
+  namespace: CUSTOM_NAMESPACE
 provisioner: STORAGE_CLASS_PROVISIONER
 parameters:
   type: STORAGE_CLASS_TYPE
@@ -10,6 +11,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: k8s
+  namespace: CUSTOM_NAMESPACE
   labels:
     prometheus: k8s
 spec:
