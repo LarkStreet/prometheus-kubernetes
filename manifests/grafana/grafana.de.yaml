@@ -25,13 +25,13 @@ spec:
         - name: GF_AUTH_GOOGLE_CLIENT_ID
           valueFrom:
             secretKeyRef:
-              name: google-oauth-credentials
-              key: id
+              name: grafana
+              key: google-oauth-id
         - name: GF_AUTH_GOOGLE_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
-              name: google-oauth-credentials
-              key: secret
+              name: grafana
+              key: google-oauth-secret
         - name: GF_AUTH_GOOGLE_SCOPES
           value: "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
         - name: GF_AUTH_GOOGLE_AUTH_URL
@@ -45,13 +45,13 @@ spec:
         - name: GF_SECURITY_ADMIN_USER
           valueFrom:
             secretKeyRef:
-              name: grafana-credentials
-              key: user
+              name: grafana
+              key: admin-username
         - name: GF_SECURITY_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: grafana-credentials
-              key: password
+              name: grafana
+              key: admin-password
         - name: GF_SMTP_ENABLED
           value: "true"
         - name: GF_SMTP_HOST
@@ -59,13 +59,13 @@ spec:
         - name: GF_SMTP_USER
           valueFrom:
             secretKeyRef:
-              name: smtp-credentials
-              key: username
+              name: grafana
+              key: smtp-username
         - name: GF_SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: smtp-credentials
-              key: password
+              name: grafana
+              key: smtp-password
         - name: GF_SMTP_FROM_ADDRESS
           value: "internal@rila.io"
         - name: GF_SMTP_FROM_NAME
