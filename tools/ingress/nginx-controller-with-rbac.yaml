@@ -1,0 +1,151 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: monitoring-http-backend
+  labels:
+    app: monitoring-http-backend
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-http-backend
+  template:
+    metadata:
+      labels:
+        app: monitoring-http-backend
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: monitoring-http-backend
+        image: gcr.io/google_containers/defaultbackend:1.4
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 10m
+            memory: 20Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-http-backend
+  namespace: ingress-nginx
+  labels:
+    app: monitoring-http-backend
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: monitoring-http-backend
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: monitoring-nginx-configuration
+  namespace: ingress-nginx
+  labels:
+    app: monitoring-ingress-nginx
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: monitoring-ingress-nginx
+  namespace: nginx-ingress
+  labels:
+    k8s-addon: ingress-nginx.addons.k8s.io
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-west-2:107488072721:certificate/680858fa-04d5-4a51-b16c-4c6f89270cd0"
+spec:
+  type: LoadBalancer
+  #loadBalancerSourceRanges:
+  #- 8.8.8.8
+  #- 8.8.4.4
+  selector:
+    app: monitoring-ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: http
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: monitoring-nginx-ingress-controller
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-ingress-nginx
+  template:
+    metadata:
+      labels:
+        app: monitoring-ingress-nginx
+      annotations:
+        prometheus.io/port: '10254'
+        prometheus.io/scrape: 'true'
+    spec:
+      serviceAccountName: monitoring-nginx-ingress-serviceaccount
+      containers:
+        - name: monitoring-nginx-ingress-controller
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.11.0
+          args:
+            - /monitoring-nginx-ingress-controller
+            - --default-backend-service=$(POD_NAMESPACE)/monitoring-http-backend
+            - --configmap=$(POD_NAMESPACE)/monitoring-nginx-configuration
+            - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+            - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+            - --annotations-prefix=nginx.ingress.kubernetes.io
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+          - name: http
+            containerPort: 80
+          - name: https
+            containerPort: 443
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
